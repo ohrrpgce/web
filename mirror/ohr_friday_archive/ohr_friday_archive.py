@@ -29,6 +29,9 @@ for filename in os.listdir(nightlies):
         # skip stuff that we don't want to archive
         continue
     srcfile = os.path.join(nightlies, filename)
+    if os.path.isdir(srcfile):
+        # skip subdirectories like docs/
+        continue
     shutil.copy2(srcfile, destdir)
 htaccess = os.path.join(destdir, ".htaccess")
 f = open(htaccess, "w")

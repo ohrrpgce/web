@@ -47,7 +47,7 @@ function sourcefile () {
   PREFIX="${2}"
   VER="${3}"
   EXT="${4}"
-  ls -1 "${REL}/${PREFIX}"-????-??-??-"${VER}.${EXT}" \
+  ls -1 "${REL}/${PREFIX}"-????-??-??-"${VER}${EXT}" \
          2>&1 \
          | grep -v ": No such file or directory" \
          | sed s/".*\/"/""/
@@ -59,7 +59,7 @@ function updatelink () {
   PREFIX="${3}"
   EXT="${4}"
   OLDPREFIX="${5}"
-  DFILE="${PREFIX}.${EXT}"
+  DFILE="${PREFIX}${EXT}"
   printf "  ${DFILE}"
   SFILE=`sourcefile "${REL}" "${PREFIX}" "${VER}" "${EXT}"`
   if [ ! -f "${REL}/${SFILE}" ] ; then
@@ -88,11 +88,25 @@ function updatelink () {
   printf "\n"
 }
 
-updatelink "${REL}" "${VER}" "ohrrpgce-win-installer" "exe" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce"               "zip" "custom" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-minimal"       "zip" "ohrrpgce-floppy" "ohrrpgce_play"
-updatelink "${REL}" "${VER}" "ohrrpgce-linux-x86"     "tar.bz2" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "zip" "" ""
-updatelink "${REL}" "${VER}" "OHRRPGCE"               "dmg" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "tar.gz" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-game-android-debug" "apk" "" ""
+# Windows files
+updatelink "${REL}" "${VER}" "ohrrpgce-win-installer" ".exe" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce"               ".zip" "custom" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-minimal"       ".zip" "ohrrpgce-floppy" "ohrrpgce_play"
+
+# Mac files
+updatelink "${REL}" "${VER}" "OHRRPGCE"               ".dmg" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   ".tar.gz" "" ""
+
+# Android files
+updatelink "${REL}" "${VER}" "ohrrpgce-game-android-debug" ".apk" "" ""
+
+# Old Linux files <= callipygous
+# Uncomment these and comment the others if you need to roll back to an old stable for no plausible reason I can imagine
+#updatelink "${REL}" "${VER}" "ohrrpgce-linux-x86"     ".tar.bz2" "" ""
+#updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" ".zip" "" ""
+
+# New Linux files >= dwimmercrafty
+updatelink "${REL}" "${VER}" "ohrrpgce-linux"     "-x86.tar.bz2" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-linux"     "-x86_64.tar.bz2" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86.zip" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86_64.zip" "" ""
