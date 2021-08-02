@@ -4,8 +4,11 @@
 
 LOCALREPO=~/ohr/ohrrpgce-git-svn
 SVNREPO=https://rpg.hamsterrepublic.com/source
-# These git repos receive wip/, tools/,  and branches
+# This git repo has all git branches: wip, web, tools and the svn branches/*
+# (We push web and tools here only for the convenience of getting them when cloning
+# the repo when this script is run the first time)
 REMOTEREPO=git@bitbucket.org:rbv/ohrrpgce-svn.git
+# This git repo receives wip/ and branches/*, but not web/ or tools/
 REMOTEREPO2=git@github.com:ohrrpgce/ohrrpgce.git
 # This git repo receives web/
 REMOTEREPO_WEB=git@github.com:ohrrpgce/web.git
@@ -55,6 +58,8 @@ done
 
 git svn fetch || exit
 git push svn $REFS
+git push svn refs/remotes/svn/tools:refs/heads/tools
+git push svn refs/remotes/svn/web:refs/heads/web
 git push gh $REFS
 git push tools refs/remotes/svn/tools:refs/heads/tools
 git push web refs/remotes/svn/web:refs/heads/web
