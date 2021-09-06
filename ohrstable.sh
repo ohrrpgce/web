@@ -1,6 +1,11 @@
 #!/bin/sh
 
-# James runs this script on HamsterRepublic.com to update the symbolic links for the latest stable release
+# This script is run on HamsterRepublic.com to update the symbolic links for the latest stable release
+# This script is really just for updating the links to the newest version, or a quick rollback to the
+# previous version. It can't reliably rollback to very old versions
+
+# pass in a non-empty PLAYER_ONLY env var to only update the links
+# for the player-only files used by the distrib menu,  while leaving the others alone
 
 WEBROOT=~/HamsterRepublic.com
 ARCHIVE="${WEBROOT}"/ohrrpgce/archive
@@ -15,6 +20,15 @@ ls -l "${DL}"/ohrrpgce-win-installer.exe \
   | cut -d "-" -f 4- \
   `
 echo "Current stable milestone is: ${STABLE}"
+
+PLAYERSTABLE=`
+ls -l "${DL}"/ohrrpgce-player-win-minimal-sdl2 \
+  | sed -e s/".*\/"/""/ \
+        -e s/"ohrrpgce-player-win-minimal-sdl2-"/""/ \
+        -e s/"\.exe$"/""/ \
+  | cut -d "-" -f 4- \
+  `
+echo "Current stable player-only milestone is: ${PLAYERSTABLE}"
 
 VER="${1}"
 USAGE="true"
@@ -37,6 +51,10 @@ if [ "${USAGE}" ] ; then
     | uniq \
     | cut -d "-" -f "4-"
   exit
+fi
+
+if [ -s "$PLAYER_ONLY" ] ; then
+  echo "Just updating the minimal player only files..."
 fi
 
 echo "Updating links to point to ${VER} milestone..."
@@ -89,11 +107,12 @@ function updatelink () {
   printf "\n"
 }
 
+if [ -z "$PLAYER_ONLY" ] ; then
 # Windows files
 updatelink "${REL}" "${VER}" "ohrrpgce-win-installer" ".exe" "" ""
 updatelink "${REL}" "${VER}" "ohrrpgce"               ".zip" "custom" ""
+# this one is confusingly named. Oh well.
 updatelink "${REL}" "${VER}" "ohrrpgce-minimal"       ".zip" "ohrrpgce-floppy" "ohrrpgce_play"
-updatelink "${REL}" "${VER}" "ohrrpgce-player-win-minimal-sdl2" ".zip" "" ""
 
 # Old Mac files for versions <= etheldreme
 #updatelink "${REL}" "${VER}" "OHRRPGCE"               ".dmg" "" ""
@@ -101,9 +120,7 @@ updatelink "${REL}" "${VER}" "ohrrpgce-player-win-minimal-sdl2" ".zip" "" ""
 
 # New Mac files >= fufluns
 updatelink "${REL}" "${VER}" "OHRRPGCE"               "-x86_64.dmg" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "-x86_64.tar.gz" "" ""
 updatelink "${REL}" "${VER}" "OHRRPGCE"               "-x86.dmg" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "-x86.tar.gz" "" ""
 
 # Android files
 updatelink "${REL}" "${VER}" "ohrrpgce-game-android-debug" ".apk" "" ""
@@ -116,8 +133,14 @@ updatelink "${REL}" "${VER}" "ohrrpgce-game-android-debug" ".apk" "" ""
 # New Linux files >= dwimmercrafty
 updatelink "${REL}" "${VER}" "ohrrpgce-linux"     "-x86.tar.bz2" "" ""
 updatelink "${REL}" "${VER}" "ohrrpgce-linux"     "-x86_64.tar.bz2" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86.zip" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86_64.zip" "" ""
 
 # Source code
 updatelink "${REL}" "${VER}" "ohrrpgce-source"    ".zip" "" ""
+fi
+
+# These are the files downloaded by the distrib menu
+updatelink "${REL}" "${VER}" "ohrrpgce-player-win-minimal-sdl2" ".zip" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "-x86_64.tar.gz" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "-x86.tar.gz" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86.zip" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86_64.zip" "" ""
