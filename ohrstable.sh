@@ -1,11 +1,38 @@
-#!/bin/sh
+#!/bin/bash
 
 # This script is run on HamsterRepublic.com to update the symbolic links for the latest stable release
 # This script is really just for updating the links to the newest version, or a quick rollback to the
 # previous version. It can't reliably rollback to very old versions
 
-# pass in a non-empty PLAYER_ONLY env var to only update the links
-# for the player-only files used by the distrib menu,  while leaving the others alone
+PLAYER_ONLY=""
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+  key="$1"
+
+  case $key in
+    -p|--player-only)
+      PLAYER_ONLY="true"
+      shift # past arg
+      ;;
+    -h|--help)
+      echo "USAGE: ./ohrstable.sh [-p] [codename]"
+      echo ""
+      echo "Run with no arguments to list available codenames"
+      echo "Don't expect this script to work well with old codenames"
+      echo "It is really just meant to switch between recent ones"
+      echo ""
+      echo "-p argument only updates the links for the minimal"
+      echo "   player only files used by the Distribute Game feature"
+      exit 0
+      ;;
+    *)    # unknown option
+      POSITIONAL+=("$1") # save it in an array for later
+      shift # past argument
+      ;;
+  esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
 
 WEBROOT=~/HamsterRepublic.com
 ARCHIVE="${WEBROOT}"/ohrrpgce/archive
@@ -22,13 +49,19 @@ ls -l "${DL}"/ohrrpgce-win-installer.exe \
 echo "Current stable milestone is: ${STABLE}"
 
 PLAYERSTABLE=`
-ls -l "${DL}"/ohrrpgce-player-win-minimal-sdl2 \
+ls -l "${DL}"/ohrrpgce-player-linux-bin-minimal-x86_64.zip \
   | sed -e s/".*\/"/""/ \
-        -e s/"ohrrpgce-player-win-minimal-sdl2-"/""/ \
-        -e s/"\.exe$"/""/ \
+        -e s/"ohrrpgce-player-linux-bin-minimal-"/""/ \
+        -e s/"-x86_64\.zip$"/""/ \
   | cut -d "-" -f 4- \
   `
 echo "Current stable player-only milestone is: ${PLAYERSTABLE}"
+
+if [ -n "$PLAYER_ONLY" ] ; then
+  echo "Just updating the minimal player only files..."
+else
+  echo "Pass -p argument if you want to only update the player links"
+fi
 
 VER="${1}"
 USAGE="true"
@@ -49,12 +82,9 @@ if [ "${USAGE}" ] ; then
           -e s/"\.exe$"/""/ \
     | sort \
     | uniq \
-    | cut -d "-" -f "4-"
+    | cut -d "-" -f "4-" \
+    | column
   exit
-fi
-
-if [ -s "$PLAYER_ONLY" ] ; then
-  echo "Just updating the minimal player only files..."
 fi
 
 echo "Updating links to point to ${VER} milestone..."
