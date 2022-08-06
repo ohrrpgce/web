@@ -141,7 +141,8 @@ if [ -z "$PLAYER_ONLY" ] ; then
 # Windows files
 updatelink "${REL}" "${VER}" "ohrrpgce-win-installer" ".exe" "" ""
 updatelink "${REL}" "${VER}" "ohrrpgce"               ".zip" "custom" ""
-# this one is confusingly named. Oh well.
+updatelink "${REL}" "${VER}" "ohrrpgce-win95"         ".zip" "" ""
+# Reduced-size version of the full engine (which is different from ohrrpgce_play but nevermind)
 updatelink "${REL}" "${VER}" "ohrrpgce-minimal"       ".zip" "ohrrpgce-floppy" "ohrrpgce_play"
 
 # Old Mac files for versions <= etheldreme
@@ -156,7 +157,10 @@ updatelink "${REL}" "${VER}" "OHRRPGCE"               "-x86.dmg" "" ""
 updatelink "${REL}" "${VER}" "ohrrpgce-game-android-debug" ".apk" "" ""
 
 # Old Linux files <= callipygous
-# Uncomment these and comment the others if you need to roll back to an old stable for no plausible reason I can imagine
+
+# Theoretically you could uncomment these and comment the others if you need to roll back
+# to an old stable for no plausible reason I can imagine, but that would overfix a fixed
+# symlink (see below)
 #updatelink "${REL}" "${VER}" "ohrrpgce-linux-x86"     ".tar.bz2" "" ""
 #updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" ".zip" "" ""
 
@@ -169,8 +173,19 @@ updatelink "${REL}" "${VER}" "ohrrpgce-source"    ".zip" "" ""
 fi
 
 # These are the files downloaded by the distrib menu
-updatelink "${REL}" "${VER}" "ohrrpgce-player-win-minimal-sdl2" ".zip" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-player-win-sdl2" ".zip" "ohrrpgce-player-win-minimal-sdl2" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-player-win-win95" ".zip" "ohrrpgce-player-win" ""
 updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "-x86_64.tar.gz" "" ""
 updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "-x86.tar.gz" "" ""
 updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86.zip" "" ""
 updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86_64.zip" "" ""
+
+# Static symlinks that exist on the server to support the distrib menu in obsolete versions:
+# For gorgonzola and older (require music_sdl build)
+# ohrrpgce-player-win.zip -> ohrrpgce-player-win-win95.zip
+# For hróðvitnir
+# ohrrpgce-player-win-minimal-sdl2.zip -> ohrrpgce-player-win-sdl2.zip
+# For etheldreme and older
+# ohrrpgce-mac-minimal.tar.gz -> ohrrpgce-mac-minimal-x86_64.tar.gz
+# For callipygous and older
+# ohrrpgce-player-linux-bin-minimal.zip -> ohrrpgce-player-linux-bin-minimal-x86.zip
