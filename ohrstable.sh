@@ -40,7 +40,7 @@ DL="${WEBROOT}"/dl
 REL="../ohrrpgce/archive"
 
 STABLE=`
-ls -l "${DL}"/ohrrpgce-win-installer.exe \
+readlink "${DL}"/ohrrpgce-win-installer.exe \
   | sed -e s/".*\/"/""/ \
         -e s/"ohrrpgce-win-installer-"/""/ \
         -e s/"\.exe$"/""/ \
@@ -49,9 +49,9 @@ ls -l "${DL}"/ohrrpgce-win-installer.exe \
 echo "Current stable milestone is: ${STABLE}"
 
 PLAYERSTABLE=`
-ls -l "${DL}"/ohrrpgce-player-linux-bin-minimal-x86_64.zip \
+readlink"${DL}"/ohrrpgce-player-linux-x86_64.zip \
   | sed -e s/".*\/"/""/ \
-        -e s/"ohrrpgce-player-linux-bin-minimal-"/""/ \
+        -e s/"ohrrpgce-player-linux-"/""/ \
         -e s/"-x86_64\.zip$"/""/ \
   | cut -d "-" -f 4- \
   `
@@ -159,7 +159,7 @@ updatelink "${REL}" "${VER}" "ohrrpgce-game-android-debug" ".apk" "" ""
 # Old Linux files <= callipygous
 
 # Theoretically you could uncomment these and comment the others if you need to roll back
-# to an old stable for no plausible reason I can imagine, but that would overfix a fixed
+# to an old stable for no plausible reason I can imagine, but that would overwrite a fixed
 # symlink (see below)
 #updatelink "${REL}" "${VER}" "ohrrpgce-linux-x86"     ".tar.bz2" "" ""
 #updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" ".zip" "" ""
@@ -177,8 +177,8 @@ updatelink "${REL}" "${VER}" "ohrrpgce-player-win-sdl2" ".zip" "ohrrpgce-player-
 updatelink "${REL}" "${VER}" "ohrrpgce-player-win-win95" ".zip" "ohrrpgce-player-win" ""
 updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "-x86_64.tar.gz" "" ""
 updatelink "${REL}" "${VER}" "ohrrpgce-mac-minimal"   "-x86.tar.gz" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86.zip" "" ""
-updatelink "${REL}" "${VER}" "ohrrpgce-player-linux-bin-minimal" "-x86_64.zip" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-player-linux"  "-x86.zip" "" ""
+updatelink "${REL}" "${VER}" "ohrrpgce-player-linux"  "-x86_64.zip" "" ""
 
 # Static symlinks that exist on the server to support the distrib menu in obsolete versions:
 # For gorgonzola and older (require music_sdl build)
