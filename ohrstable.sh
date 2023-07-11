@@ -49,10 +49,10 @@ readlink "${DL}"/ohrrpgce-win-installer.exe \
 echo "Current stable milestone is: ${STABLE}"
 
 PLAYERSTABLE=`
-readlink"${DL}"/ohrrpgce-player-linux-x86_64.zip \
+readlink "${DL}"/ohrrpgce-source.zip \
   | sed -e s/".*\/"/""/ \
-        -e s/"ohrrpgce-player-linux-"/""/ \
-        -e s/"-x86_64\.zip$"/""/ \
+        -e s/"ohrrpgce-source-"/""/ \
+        -e s/"\.zip$"/""/ \
   | cut -d "-" -f 4- \
   `
 echo "Current stable player-only milestone is: ${PLAYERSTABLE}"
