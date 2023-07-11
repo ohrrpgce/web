@@ -48,14 +48,16 @@ readlink "${DL}"/ohrrpgce-win-installer.exe \
   `
 echo "Current stable milestone is: ${STABLE}"
 
+# ohrrpgce-player-linux-x86_64.zip is new in ichorescent. player packages have
+# been renamed a number of times, and all were renamed in ichorescent.
 PLAYERSTABLE=`
-readlink "${DL}"/ohrrpgce-source.zip \
+readlink "${DL}"/ohrrpgce-player-linux-x86_64.zip \
   | sed -e s/".*\/"/""/ \
-        -e s/"ohrrpgce-source-"/""/ \
-        -e s/"\.zip$"/""/ \
+        -e s/"ohrrpgce-player-linux-"/""/ \
+        -e s/"-x86_64\.zip$"/""/ \
   | cut -d "-" -f 4- \
   `
-echo "Current stable player-only milestone is: ${PLAYERSTABLE}"
+echo "Current (post-ichorescent) stable player-only milestone is: ${PLAYERSTABLE}"
 
 if [ -n "$PLAYER_ONLY" ] ; then
   echo "Just updating the minimal player only files..."
