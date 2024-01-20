@@ -3,6 +3,8 @@
 # (The vault password is only known to OHRRPGCE Website Admins)
 
 # Install/Upgrade Mediawiki for OHRRPGCE
+# See also https://www.mediawiki.org/wiki/Manual:Upgrading if this breaks
+# for and future versions of MediaWiki
 
 #-----------------------------------------------------------------------
 
@@ -15,9 +17,9 @@
     # These files need to exist inside the local ohrwiki_data folder
     # You may need to download the mediawiki tarball yourself.
     # the plugin and skin tarballs are small enough to included in version control
-    mediawiki_tarball: mediawiki-1.35.6.tar.gz
+    mediawiki_tarball: mediawiki-1.39.6.tar.gz
     embedvideo_zip: EmbedVideo-v2.8.0.zip
-    metrolook_skin: Metrolook-REL1_35-378825e.tar.gz
+    metrolook_skin: Metrolook-REL1_39-9b355b6.tar.gz
     
     # These paths are on the remote server
     temp_dir: /home/james_paige/rpg.hamsterrepublic.com/ohrrpgce-temp
@@ -25,7 +27,7 @@
     real_dir: /home/james_paige/rpg.hamsterrepublic.com/ohrrpgce
     
     # Dreamhost puts php executable here
-    bin_php: /usr/local/php74/bin/php
+    bin_php: /usr/local/php81/bin/php
     
     # Encrypted mysql password
     # the --ask-vault-pass argument is what decrypts this 
