@@ -28,7 +28,7 @@ if [ ! -d "$WORKING_COPY" ] ; then
 fi
 
 cd "$WORKING_COPY"
-git checkout "$BRANCH"
+git checkout "$BRANCH" || exit 1
 
 OLD_COMMIT=$(git log | head -1 | cut -d " " -f 2)
 git pull origin "$BRANCH" --rebase
