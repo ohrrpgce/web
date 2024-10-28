@@ -3,11 +3,11 @@
 # This assumes that we aren't using this particular copy for dev, we treat it as read-only
 # and we just pull new commits on the branch
 
-WORKING_COPY=~/src/ohrcron/ohr-git-mail
-BRANCH=wip
+WORKING_COPY=${WORKING_COPY:-~/src/ohrcron/ohr-git-mail}
+BRANCH=${BRANCH:-wip}
 
 SCRIPTDIR="${0%/*}"
-LOGFILE="$SCRIPTDIR/git-mail.log"
+LOGFILE="$SCRIPTDIR/git-mail-$BRANCH.log"
 
 if [ -n "always" ] ; then
 echo "--------"
@@ -45,7 +45,7 @@ else
   echo "From: $MAILFROM" > "$SCRIPTDIR/git-mail.txt"
   echo "To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
   echo "Reply-To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
-  echo "Subject: ohrrpgce commit:$SUBJECT" >> "$SCRIPTDIR/git-mail.txt"
+  echo "Subject: $BRANCH commit:$SUBJECT" >> "$SCRIPTDIR/git-mail.txt"
   echo "" >> "$SCRIPTDIR/git-mail.txt"
   echo "$DIFFLOG" | grep -v "git-svn-id:" >> "$SCRIPTDIR/git-mail.txt"
 
