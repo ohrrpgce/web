@@ -7,10 +7,15 @@ WORKING_COPY=~/src/ohrcron/ohr-git-mail
 BRANCH=wip
 
 SCRIPTDIR="${0%/*}"
+LOGFILE="$SCRIPTDIR/git-mail.log"
+
+if [ -n "always" ] ; then
+echo "--------"
+date "+%Y-%m-%d %H:%M:%S"
 
 # The smtp_config.sh file can override these variables, and must override PASSWD
 MAILFROM=cron@rpg.hamsterrepublic.com
-MAILTO=ohrrpgce@lists.motherhamster.com
+MAILTO=ohrrpgce@lists.motherhamster.org
 SMTP="smtps://smtp.dreamhost.com:465"
 USERNAME="cron@rpg.hamsterrepublic.com"
 PASSWD="*REDACTED*"
@@ -40,10 +45,11 @@ else
   echo "From: $MAILFROM" > "$SCRIPTDIR/git-mail.txt"
   echo "To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
   echo "Reply-To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
-  echo "Subject: ohrrpgce commit: $SUBJECT" >> "$SCRIPTDIR/git-mail.txt"
+  echo "Subject: ohrrpgce commit:$SUBJECT" >> "$SCRIPTDIR/git-mail.txt"
   echo "" >> "$SCRIPTDIR/git-mail.txt"
   echo "$DIFFLOG" | grep -v "git-svn-id:" >> "$SCRIPTDIR/git-mail.txt"
 
+  echo "Sending mail to $MAILTO"
   curl $SMTP -s -S \
     --mail-from $MAILFROM \
     --mail-rcpt $MAILTO \
@@ -52,3 +58,5 @@ else
     --upload-file "$SCRIPTDIR/git-mail.txt"
   
 fi
+
+fi 2>&1 | tee "$LOGFILE"
