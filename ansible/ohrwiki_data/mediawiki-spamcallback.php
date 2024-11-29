@@ -140,9 +140,11 @@ function spamCallBack($editor, $text, $section, &$error, $summary){
     //     sprintf('From: %s',$wgEmergencyContact));
 
     // attempt to deceive the spammer into thinking their edit succeeded
-    $parserOptions = ParserOptions::newFromUser( $wgUser );
-    $parserOutput = $wgParser->parse( $body, $title, $parserOptions );
-    $deceitHTML = $parserOutput->mText;
+    // EDIT: the old way of doing this doesn't work anymore, so just say "success"
+    //$parserOptions = ParserOptions::newFromUser( $wgUser );
+    //$parserOutput = $wgParser->parse( $body, $title, $parserOptions );
+    //$deceitHTML = $parserOutput->mText;
+    $deceitHTML = "success";
     $wgOut->addHTML($deceitHTML);
     $wgOut->addHTML( "<br style=\"clear:both;\" />\n" );
     return false;
