@@ -28,6 +28,7 @@ if [ ! -d "$WORKING_COPY" ] ; then
 fi
 
 cd "$WORKING_COPY"
+git fetch origin "$BRANCH" || exit 1
 git checkout "$BRANCH" || exit 1
 
 OLD_COMMIT=$(git log | head -1 | cut -d " " -f 2)
@@ -40,22 +41,35 @@ if [ -z "$DIFFLOG" ] ; then
   echo "No changes"
 else
 
-  SUBJECT=$(echo "$DIFFLOG" | grep "^ " | tr -s " " | grep -v "^ $" | head -1)
+  #Split commits
+  MAILNUM=1
+  printf "$DIFFLOG\x00" | sed  's/^commit /\x00commit /g' | while IFS= read -r -d '' CHUNK ; do
+  
+    if [ "$CHUNK" = "" ] ; then
+      # The first chunk will always be empty
+      continue
+    fi
 
-  echo "From: $MAILFROM" > "$SCRIPTDIR/git-mail.txt"
-  echo "To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
-  echo "Reply-To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
-  echo "Subject: $BRANCH commit:$SUBJECT" >> "$SCRIPTDIR/git-mail.txt"
-  echo "" >> "$SCRIPTDIR/git-mail.txt"
-  echo "$DIFFLOG" | grep -v "git-svn-id:" >> "$SCRIPTDIR/git-mail.txt"
+    SUBJECT=$(echo "$CHUNK" | grep "^ " | tr -s " " | grep -v "^ $" | head -1)
 
-  echo "Sending mail to $MAILTO"
-  curl $SMTP -s -S \
-    --mail-from $MAILFROM \
-    --mail-rcpt $MAILTO \
-    --ssl --ssl-reqd \
-    -u "$USERNAME":"$PASSWD" \
-    --upload-file "$SCRIPTDIR/git-mail.txt"
+    echo "From: $MAILFROM" > "$SCRIPTDIR/git-mail.txt"
+    echo "To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
+    echo "Reply-To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
+    echo "Subject: $BRANCH commit:$SUBJECT" >> "$SCRIPTDIR/git-mail.txt"
+    echo "" >> "$SCRIPTDIR/git-mail.txt"
+    echo "$CHUNK" | grep -v "git-svn-id:" >> "$SCRIPTDIR/git-mail.txt"
+    
+    echo "$MAILNUM Sending mail to $MAILTO -- $SUBJECT"
+    curl $SMTP -s -S \
+      --mail-from $MAILFROM \
+      --mail-rcpt $MAILTO \
+      --ssl --ssl-reqd \
+      -u "$USERNAME":"$PASSWD" \
+      --upload-file "$SCRIPTDIR/git-mail.txt"
+    
+    MAILNUM=$(expr "$MAILNUM" + 1)
+
+  done
   
 fi
 
