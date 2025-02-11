@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 url = "http://www.slimesalad.com/forum/gamedump.php"
 mirrordir = "./slimesalad/"
@@ -6,7 +6,7 @@ mirrordir = "./slimesalad/"
 #----------------------------------------------------------------------
 
 import os
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from datetime import datetime
 import time
 import re
@@ -82,8 +82,8 @@ class GameFile(object):
 class GameDumpReader(object):
 
     def __init__(self, url, local):
-        #print "Fetching ", url
-        f = urllib2.urlopen(url)
+        #print("Fetching ", url)
+        f = urllib.request.urlopen(url)
         cr = ChunkReader(f)
         for chunk in cr.each():
            game = GameInfo(chunk)
@@ -176,8 +176,8 @@ class LocalGameCache(object):
 #######################################################################
 
 def download(url, local_file):
-    print "downloading %s" % (os.path.basename(local_file))
-    input = urllib2.urlopen(url)
+    print("downloading %s" % (os.path.basename(local_file)))
+    input = urllib.request.urlopen(url)
     output = open(local_file, "wb")
     output.write(input.read())
     output.close()
