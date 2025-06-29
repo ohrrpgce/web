@@ -71,6 +71,10 @@ else
 
     MAILNUM=$(expr "$MAILNUM" + 1)
 
+    # Wait a small random amount of time between each mail
+    SLEEP_SECONDS=$(shuf -i 8-10 -n 1).$(shuf -i 0-9 -n 1)
+    sleep "$SLEEP_SECONDS"
+
   done
   
 fi
