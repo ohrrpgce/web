@@ -35,7 +35,7 @@ OLD_COMMIT=$(git log | head -1 | cut -d " " -f 2)
 git pull origin "$BRANCH" --rebase
 NEW_COMMIT=$(git log | head -1 | cut -d " " -f 2)
 
-DIFFLOG=$(git log --stat ${OLD_COMMIT}...${NEW_COMMIT})
+DIFFLOG=$(git log --reverse --stat ${OLD_COMMIT}...${NEW_COMMIT})
 
 if [ -z "$DIFFLOG" ] ; then
   echo "No changes"
