@@ -18,7 +18,7 @@
     # You may need to download the mediawiki tarball yourself.
     # the plugin and skin tarballs are small enough to included in version control
     mediawiki_tarball: mediawiki-1.43.2.tar.gz
-    embedvideo_zip: EmbedVideo-v2.8.0.zip
+    embedvideo_git_url: https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git
     metrolook_skin: Metrolook-REL1_39-9b355b6.tar.gz
     
     # These paths are on the remote server
@@ -109,26 +109,14 @@
       regexp: '^include "LocalFirst\.php";'
       insertafter: '.*PHPVersionCheck'
       line: 'include "LocalFirst.php"; # special for ohrrpgce wiki'
-      
-  - name: Transfer EmbedVideo plugin
-    copy:
-      src: ohrwiki_data/{{ embedvideo_zip }}
-      dest: '{{ temp_dir }}/{{ embedvideo_zip }}'
-      mode: '0644'
-    register: upload_embedvideo
 
-  - name: Extract EmbedVideo plugin
-    unarchive:
-      src: '{{ temp_dir }}/{{ embedvideo_zip }}'
-      dest: '{{ temp_dir }}/'
-      remote_src: yes
-    when: upload_embedvideo.changed
+  - name: Check out EmbedVideo
+    shell: 'git clone --depth 1 -b master {{ embedvideo_git_url }} {{ staging_dir }}/extensions/EmbedVideo'
 
-  - name: Put ExtractVideo into position
-    copy:
-      src: '{{ temp_dir }}/{{ embedvideo_zip | splitext | first }}/'
-      dest: '{{ staging_dir }}/extensions/EmbedVideo'
-      remote_src: yes
+  - name: Discard git folder from shallow clone of EmbedVideo
+    file:
+      state: absent
+      dest: '{{ staging_dir }}/extensions/EmbedVideo/.git'
 
   - name: Upload Metrolook skin tarball
     copy:
