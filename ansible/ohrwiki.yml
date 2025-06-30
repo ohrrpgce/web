@@ -17,7 +17,7 @@
     # These files need to exist inside the local ohrwiki_data folder
     # You may need to download the mediawiki tarball yourself.
     # the plugin and skin tarballs are small enough to included in version control
-    mediawiki_tarball: mediawiki-1.39.12.tar.gz
+    mediawiki_tarball: mediawiki-1.43.2.tar.gz
     embedvideo_zip: EmbedVideo-v2.8.0.zip
     metrolook_skin: Metrolook-REL1_39-9b355b6.tar.gz
     
@@ -28,6 +28,7 @@
     
     # Dreamhost puts php executable here
     bin_php: /usr/local/php81/bin/php
+    bin_composer: /usr/local/wp/vendor/bin/composer
     
     # Encrypted mysql password
     # the --ask-vault-pass argument is what decrypts this 
@@ -140,6 +141,11 @@
       src: '{{ temp_dir }}/{{ metrolook_skin }}'
       dest: '{{ staging_dir }}/skins/'
       remote_src: yes
+
+  - name: Update the composer dependencies
+    shell: '{{ bin_composer }} update --no-dev --no-ansi --no-progress --no-interaction'
+    args:
+      chdir: '{{ staging_dir }}'
 
   - name: Update the mediawiki database
     shell: '{{ bin_php }} update.php --quick'

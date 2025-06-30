@@ -217,7 +217,8 @@ $wgSysopRangeBans = true;
 # Extensions
 $wgPFEnableStringFunctions = true;
 
-wfLoadExtension( 'EmbedVideo' );
+# Temporarily disabled until we find a way to make it work on MediaWiki 1.43
+#wfLoadExtension( 'EmbedVideo' );
 
 wfLoadExtension( 'ConfirmEdit' );
 wfLoadExtension( 'ConfirmEdit/QuestyCaptcha' );
@@ -259,7 +260,8 @@ $wgShowDBErrorBacktrace = true;
 
 #wfLoadExtension('SimpleBatchUpload');
 
-wfLoadExtension('Renameuser');
+# This extension seems to have been removed between 1.39 and 1.43
+#wfLoadExtension('Renameuser');
 
 wfLoadExtension('ParserFunctions');
 $wgPFEnableStringFunctions = true;
