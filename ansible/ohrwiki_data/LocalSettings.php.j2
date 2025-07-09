@@ -264,3 +264,12 @@ $wgShowDBErrorBacktrace = true;
 
 wfLoadExtension('ParserFunctions');
 $wgPFEnableStringFunctions = true;
+
+# Block history access for anonymous users
+$wgHooks['MediaWikiPerformAction'][] = function( $output, $article, $title, $user, $request, $wiki ) {
+  if( ( !$user || $user->isAnon() ) && ( $request->getVal('action') == 'history' ) ) {
+    return false;
+  }
+  return true;
+};
+
