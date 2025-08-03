@@ -226,19 +226,9 @@ $wgCaptchaTriggers['edit'] = true;
 $wgCaptchaTriggers['create'] = true; 
 
 $wgCaptchaClass = 'QuestyCaptcha';
-$wgCaptchaQuestions[] = array( 'question' => "What year did Yoko Ono celebrate her 20th birthday? (If you don't know, just google it!)", 'answer' => "1953" );
-$wgCaptchaQuestions[] = array( 'question' => "On what day in September is Talk Like a Pirate Day celebrated? (If you don't know, just google it!)", 'answer' => "19" );
-$wgCaptchaQuestions[] = array( 'question' => "In what year was the king known as Edward the Confessor born? (If you don't know, just google it!)", 'answer' => "1003" );
-$wgCaptchaQuestions[] = array( 'question' => "In what city or village was Nikola Tesla born? (If you don't know, just google it!)", 'answer' => array("Smiljan", "smiljan") );
-$wgCaptchaQuestions[] = array( 'question' => "In what year did Orson Scott Card publish Xenocide? (If you don't know, just google it!)", 'answer' => "1991" );
-$wgCaptchaQuestions[] = array( 'question' => "How old was Martin Luther King Jr when he won the Nobel Peace Prize? (If you don't know, just google it!)", 'answer' => "35" );
-$wgCaptchaQuestions[] = array( 'question' => "In 1992, Dan Quayle incorrectly spelled 'potatoe' at a spelling bee. What was the last name of the student who spelled it correctly at the same spelling bee? (If you don't know, just google it!)", 'answer' => "Figueroa" );
-$wgCaptchaQuestions[] = array( 'question' => "The famous author Mark Twain used a pen-name. His real name was different. What was his father's middle name? (If you don't know, just google it!)", 'answer' => "Marshall" );
-$wgCaptchaQuestions[] = array( 'question' => "Find the name of the person who invented the Carburetor in 1826. When he died, where was he buried? (If you don't know, just google it!)", 'answer' => array("Orford") );
-
-# Disabled questions that spammers already know the answers to
-#$wgCaptchaQuestions[] = array( 'question' => "How many red stripes are on the flag of Liberia? (If you don't know, just google it!)", 'answer' => "6" );
-#$wgCaptchaQuestions[] = array( 'question' => "In which year was Winston Churchill born? (If you don't know, just google it!)", 'answer' => "1874" );
+# Default question of the include isn't found
+$wgCaptchaQuestions[] = array( 'question' => "What does the \"H\" in OHRRPGCE stand for?", 'answer' => array("Hamster") );
+include "CaptchaQuestConfig.php";
 
 require_once('mediawiki-spamcallback.php');
 $wgHooks['EditFilter'][] = 'spamCallBack';

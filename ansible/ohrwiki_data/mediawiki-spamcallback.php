@@ -93,15 +93,6 @@ function spamCallBack($editor, $text, $section, &$error, $summary){
       $block = checkBlackList($spamSPAMWORDS,'spammy keyword',$diff,$reason);
     }
     if (!$block){
-      // The main page is the most-spammed, and therefore may need extra rules
-      if(!$block and 'Main Page' == $title->mTextform and !$title->mPrefixedText){
-        if(preg_match('/http:\/\//',$diff)){
-          $reason = 'direct links are forbidden on the main page';
-          $block = true;
-        }
-      }
-    }
-    if (!$block){
       // special handling for non-logged-in users
       if(preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $who)){
         // no special processing currently enabled

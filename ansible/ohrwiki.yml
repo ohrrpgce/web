@@ -6,6 +6,9 @@
 # See also https://www.mediawiki.org/wiki/Manual:Upgrading if this breaks
 # for and future versions of MediaWiki
 
+# Note that if the target host is a bit overloaded (dreamhost shared host
+# for example), sometimes things might fail and need retries.
+
 #-----------------------------------------------------------------------
 
 - hosts: hamsterrepublic
@@ -110,6 +113,11 @@
       insertafter: '.*PHPVersionCheck'
       line: 'include "LocalFirst.php"; # special for ohrrpgce wiki'
 
+  - name: Discard any leftover EmbedVideo from a previous failed run
+    file:
+      state: absent
+      dest: '{{ staging_dir }}/extensions/EmbedVideo'
+
   - name: Check out EmbedVideo
     shell: 'git clone --depth 1 -b master {{ embedvideo_git_url }} {{ staging_dir }}/extensions/EmbedVideo'
 
@@ -130,6 +138,8 @@
       dest: '{{ staging_dir }}/skins/'
       remote_src: yes
 
+  # NOTE: This is a fairly heavy server-side process, so don't be surprised if it
+  # fails occasionally on a busy dreamhost shared server. Just wait a bit and retry
   - name: Update the composer dependencies
     shell: '{{ bin_composer }} update --no-dev --no-ansi --no-progress --no-interaction'
     args:
