@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # This script is run on HamsterRepublic.com to update the symbolic links for the latest stable release
+# It also invokes update_releases.py.
 # This script is really just for updating the links to the newest version, or a quick rollback to the
 # previous version. It can't reliably rollback to very old versions
 
@@ -38,6 +39,7 @@ WEBROOT=~/HamsterRepublic.com
 ARCHIVE="${WEBROOT}"/ohrrpgce/archive
 DL="${WEBROOT}"/dl
 REL="../ohrrpgce/archive"
+UPDATE_RELEASES="~/update_releases.py"
 
 STABLE=`
 readlink "${DL}"/ohrrpgce-win-installer.exe \
@@ -210,3 +212,6 @@ updatelink "${REL}" "${VER}" "ohrrpgce-player-linux"  "-x86_64.zip" "ohrrpgce-pl
 # ohrrpgce-player-linux-bin-minimal.zip          -> ohrrpgce-player-linux-bin-minimal-2016-06-06-callipygous+1.zip
 #   For alectormancy+1/2
 # ohrrpgce-mac-minimal-linkless.tar.gz  (not a symlink)
+
+echo "Updating releases.txt..."
+"${UPDATE_RELEASES}" "${ARCHIVE}" "${ARCHIVE}/releases.txt"
