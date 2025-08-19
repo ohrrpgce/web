@@ -10,6 +10,19 @@ import argparse
 import os
 import re
 
+HEADER = """# Used to check for new releases.
+# The release.$release key on each line provides the name as used in download filenames.
+# .name is the display name of a release.
+# .date is YYYY-MM-DD.
+# .update_for (optional) is the major version for which this is a minor update.
+# .description (optional) describes a potential update, and if it changes the update
+#     should be suggested again.
+# .notice (optional) is for warnings that should be shown to users running that version.
+#     Should be displayed whenever it changes.
+
+downloads_url = https://rpg.hamsterrepublic.com/ohrrpgce/Downloads
+archive_url = http://hamsterrepublic.com/ohrrpgce/archive/
+"""
 
 def read_releases(releases_file):
     "Reads a releases.txt file and returns a release name -> date dict."
@@ -77,9 +90,11 @@ def main():
     )
     args = parser.parse_args()
 
+    release_text = ""
     if not os.path.exists(args.releases_file):
         existing_releases = {}
         print(f"{args.releases_file} not found, recreating")
+        release_text = HEADER
     else:
         existing_releases = read_releases(args.releases_file)
         print(f"Found {len(existing_releases)} existing releases in {args.releases_file}")
@@ -95,7 +110,7 @@ def main():
         return
 
     new_releases.sort(key = lambda release: release["date"])
-    release_text = generate_release_text(new_releases)
+    release_text += generate_release_text(new_releases)
 
     if args.dry_run:
         print(release_text)
