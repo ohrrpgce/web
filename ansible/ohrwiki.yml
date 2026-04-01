@@ -20,7 +20,7 @@
     # These files need to exist inside the local ohrwiki_data folder
     # You may need to download the mediawiki tarball yourself.
     # the plugin and skin tarballs are small enough to included in version control
-    mediawiki_tarball: mediawiki-1.43.2.tar.gz
+    mediawiki_tarball: mediawiki-1.43.7.tar.gz
     embedvideo_git_url: https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git
     metrolook_skin: Metrolook-REL1_39-9b355b6.tar.gz
     
@@ -30,7 +30,7 @@
     real_dir: /home/james_paige/rpg.hamsterrepublic.com/ohrrpgce
     
     # Dreamhost puts php executable here
-    bin_php: /usr/local/php81/bin/php
+    bin_php: /usr/local/php83/bin/php
     bin_composer: /usr/local/wp/vendor/bin/composer
     
     # Encrypted mysql password
