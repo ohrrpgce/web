@@ -50,15 +50,15 @@ else
       continue
     fi
 
-    SVNREV=$(echo "$CHUNK" | sed -n -E -e '/git-svn-id:/ s/.*@([0-9]+).*/\1/p')
+    REV=$(./misc/revision_number.sh)
     SUBJECT=$(echo "$CHUNK" | grep "^ " | tr -s " " | grep -v "^ $" | head -1)
 
     echo "From: $MAILFROM" > "$SCRIPTDIR/git-mail.txt"
     echo "To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
     echo "Reply-To: $MAILTO" >> "$SCRIPTDIR/git-mail.txt"
-    echo "Subject: $BRANCH r$SVNREV:$SUBJECT" >> "$SCRIPTDIR/git-mail.txt"
+    echo "Subject: $BRANCH r$REV:$SUBJECT" >> "$SCRIPTDIR/git-mail.txt"
     echo "" >> "$SCRIPTDIR/git-mail.txt"
-    echo "$CHUNK" | sed -E -e 's_^commit (\S+)_https://github.com/ohrrpgce/ohrrpgce/commit/\1_' | grep -v "git-svn-id:" >> "$SCRIPTDIR/git-mail.txt"
+    echo "$CHUNK" | sed -E -e 's_^commit (\S+)_https://github.com/ohrrpgce/ohrrpgce/commit/\1_' >> "$SCRIPTDIR/git-mail.txt"
 
     echo "$MAILNUM Sending mail to $MAILTO -- $SUBJECT"
 
